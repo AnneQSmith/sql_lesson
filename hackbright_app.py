@@ -30,7 +30,7 @@ def make_new_project(*args):
     title = args[0]
     description = ' '.join(args[1:-1])
     max_grade = int(args[-1])
-    print title, description, max_grade
+    #print title, description, max_grade
     query = """INSERT into Projects (title, description, max_grade) VALUES (?, ?, ?);"""
     DB.execute(query, (title, description, max_grade))
     CONN.commit()
@@ -45,6 +45,31 @@ Project: %s
 UserName: %s
 Grade: %d"""% (title, github,row[0])
 
+def show_all_grades_by_github(github):
+    query = """ SELECT project_title, grade FROM Grades where student_github = ?"""
+    DB.execute(query, (github,))
+    print "Showing all available grades for %s" % (github)
+    print  "Project       Grade"
+    row = DB.fetchone()
+    while row:
+        print row[0],'        ', row[1]
+        row = DB.fetchone()
+
+
+def give_grade_for_project(github, project, grade):
+    grade = int(grade)
+    query = """SELECT COUNT(*) FROM Projects WHERE title = ?"""
+    DB.execute(query, (project,))
+    row = DB.fetchone()
+    if row[0] == 0:
+        print "That project does not exist!"
+        return
+
+    query = """INSERT INTO Grades (student_github, project_title, grade) VALUES (?, ?, ?);"""
+    DB.execute(query, (github, project, grade))
+    CONN.commit()
+    print "Successfully added grade %d for project %s by student %s" % (grade, project, github)
+
 
 def connect_to_db():
     global DB, CONN
@@ -54,11 +79,35 @@ def connect_to_db():
 def main():
     connect_to_db()
     command = None
+
+    commands = {
+        'student': ['github'],
+        'new_student': ['first_name', 'last_name', 'github'],
+        'project': ['title'],
+        'new_project': ['title', 'description', 'max_grade'],
+        'project_grade': ['title', 'github'],
+        'assign_grade': ['github', 'project', 'grade'],
+        'show_grades': ['github']
+    }
+
     while command != "quit":
         input_string = raw_input("HBA Database> ")
         tokens = input_string.split()
         command = tokens[0]
         args = tokens[1:]
+
+        command_args = commands.get(command)
+        if command_args:
+            if len(command_args) != len(args):
+                print "You have not entered the correct number of arguments."
+                print "Correct usage for %s:" % command
+                print command_args
+                continue
+        else:
+            print ('Valid commands:  student, new_student, project, new_project,\
+project_grade, assign_grade, show_grades')
+            continue
+
 
         if command == "student":
             get_student_by_github(*args) 
@@ -70,8 +119,13 @@ def main():
             make_new_project(*args)
         elif command == "project_grade":
             get_project_grade_by_github(*args)
+        elif command == "assign_grade":
+            give_grade_for_project(*args)
+        elif command == "show_grades":
+            show_all_grades_by_github(*args)
         else:
-            print ('Valid commands:  student, new_student, project, new_project')
+            print ('Valid commands:  student, new_student, project, new_project,\
+             project_grade, assign_grade, show_grades')
 
     CONN.close()
 
