@@ -7,9 +7,10 @@ def get_student_by_github(github):
     query = """SELECT first_name, last_name, github FROM Students WHERE github = ?"""
     DB.execute(query, (github,))
     row = DB.fetchone()
-    print """\
-Student: %s %s
-Github account: %s"""%(row[0], row[1], row[2])
+    return row
+#     return """\
+# Student: %s %s
+# Github account: %s"""%(row[0], row[1], row[2])
 
 def make_new_student(first_name,last_name,github):
     query = """INSERT into Students (first_name, last_name, github) values (?, ?, ?)"""
@@ -48,12 +49,14 @@ Grade: %d"""% (title, github,row[0])
 def show_all_grades_by_github(github):
     query = """ SELECT project_title, grade FROM Grades where student_github = ?"""
     DB.execute(query, (github,))
-    print "Showing all available grades for %s" % (github)
-    print  "Project       Grade"
+    # print "Showing all available grades for %s" % (github)
+    # print  "Project       Grade"
     row = DB.fetchone()
+    rows = []
     while row:
-        print row[0],'        ', row[1]
+        rows.append(row)
         row = DB.fetchone()
+    return rows
 
 
 def give_grade_for_project(github, project, grade):
@@ -70,6 +73,15 @@ def give_grade_for_project(github, project, grade):
     CONN.commit()
     print "Successfully added grade %d for project %s by student %s" % (grade, project, github)
 
+def get_grades_for_project(project):
+    query = """SELECT student_github, grade FROM Grades where project_title = ?"""
+    DB.execute(query, (project,))
+    row = DB.fetchone()
+    rows = []
+    while row:
+        rows.append(row)
+        row = DB.fetchone()
+    return rows
 
 def connect_to_db():
     global DB, CONN
