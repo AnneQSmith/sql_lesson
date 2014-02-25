@@ -1,0 +1,16 @@
+h1 {
+    color: #eb462a;
+}
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.search {
+    margin: 5px;
+}
+
+.create {
+    width: 950px;
+    margin: 5px;
+    padding: 5px;
+}

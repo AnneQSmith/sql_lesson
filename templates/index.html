@@ -1,50 +1,61 @@
 <html>
+<head>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
 <body>
+    <img src="static/hackbright.png">
     <h1> Welcome to our student grading app </h1>
-    <h2> Grades by student </h2>
-    <form action="/student">
-        <select name="github">
-            {% for github in githubs %}
-            <option value={{github[0]}}>{{github[0]}}</option>
-            {% endfor %}
-        </select>
-        <input type="submit">
-    </form>
 
-    <h2> Create a new student </h2>
+    <div class="search">
+        <h2> Grades by student </h2>
+        <form action="/student">
+            <select name="github">
+                {% for github in githubs %}
+                <option value={{github[0]}}>{{github[0]}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit">
+        </form>
+    </div>
 
-    <form action="/new_student">
-        <label for="github">Enter github id</label>
-        <input type="text" name="github"/>
-        <label for="first_name">Enter given name</label>
-        <input type="text" name="first_name"/>
-        <label for="last_name">Enter surname</label>
-        <input type="text" name="last_name"/>
-        <input type="submit">
-    </form>
+    <div class="create">
+        <h2> Create a new student </h2>
 
-    <h2> Grades by project </h2>
+        <form action="/new_student">
+            <label for="github">Enter github id</label>
+            <input type="text" name="github"/>
+            <label for="first_name">Enter given name</label>
+            <input type="text" name="first_name"/>
+            <label for="last_name">Enter surname</label>
+            <input type="text" name="last_name"/>
+            <input type="submit">
+        </form>
+    </div>
 
-    <form action="/project">
-        <select name="ptitle">
-            {% for title in titles %}
-            <option value={{title[0]}}>{{title[0]}}</option>
-            {% endfor %}
-        </select>   
-        <input type="submit">
-    </form>
+    <div class="search">
+        <h2> Grades by project </h2>
 
-    <h2> Create a new project </h2>
+        <form action="/project">
+            <select name="ptitle">
+                {% for title in titles %}
+                <option value={{title[0]}}>{{title[0]}}</option>
+                {% endfor %}
+            </select>   
+            <input type="submit">
+        </form>
+    </div>
+    <div class="create">
+        <h2> Create a new project </h2>
 
-    <form action="/new_project">
-        <label for="title">Project title</label>
-        <input type="text" name="title"/>
-        <label for="description">Project description</label>
-        <input type="text" name="description"/>
-        <label for="max_grade">Max score</label>
-        <input type="text" name="max_grade"/>
-        <input type="submit">
-    </form>
-
+        <form action="/new_project">
+            <label for="title">Project title</label>
+            <input type="text" name="title"/>
+            <label for="description">Project description</label>
+            <input type="text" name="description"/>
+            <label for="max_grade">Max score</label>
+            <input type="text" name="max_grade"/>
+            <input type="submit">
+        </form>
+    </div>
 </body>
 </html>
