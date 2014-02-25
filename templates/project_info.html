@@ -7,6 +7,8 @@
     {% for grade in project_grades %}
     <li><a href='student?github={{grade[0]}}'>{{grade[0]}}</a>, {{grade[1]}}</li>
     {% endfor %}
+    <li><a href='add_grade?title={{title}}'>Add grade</a></li>
 </ul>
+<a href = "/"> Back Home  </a>
 </body>
 </html>

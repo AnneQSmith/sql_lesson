@@ -5,11 +5,60 @@ app = Flask(__name__)
 
 @app.route("/")
 def get_github():
-    return render_template("get_github.html")
+
+    hackbright_app.connect_to_db()
+    githubs = hackbright_app.get_all_githubs()
+    titles = hackbright_app.get_all_projects()
+
+    hackbright_app.CONN.close()   
+    return render_template("index.html", githubs=githubs, titles=titles)
 
 @app.route("/create_student")
 def create_student():
     return render_template("create_student.html")
+
+@app.route("/create_project")
+def create_project():
+    return render_template("create_project.html")
+
+@app.route("/new_project")
+def new_project():
+    hackbright_app.connect_to_db()
+
+    title = request.args.get("title")
+    description = request.args.get("description")
+    max_grade = request.args.get("max_grade")
+    hackbright_app.make_new_project(title=title, description=description, max_grade=max_grade)
+    html = render_template("project_info.html", title=title, project_grades=[])
+
+    hackbright_app.CONN.close()
+    return html
+
+@app.route("/add_grade")
+def add_grade():
+
+    hackbright_app.connect_to_db()
+
+    title = request.args.get("title")
+    githubs = hackbright_app.get_all_githubs()
+
+    hackbright_app.CONN.close()
+    return render_template("add_grade.html", title=title, githubs=githubs)
+
+@app.route("/new_grade")
+def new_grade():
+    hackbright_app.connect_to_db()
+
+    github = request.args.get("github")
+    title = request.args.get("title")
+    grade = request.args.get("grade")
+    hackbright_app.give_grade_for_project(github, title, grade)
+    project_grades = hackbright_app.get_grades_for_project(title)
+    html = render_template("project_info.html", title = title, project_grades= project_grades)
+
+    hackbright_app.CONN.close()
+    return html
+
 
 @app.route("/new_student")
 def new_student():

@@ -27,10 +27,18 @@ Project: %s
 Descrription: %s
 Max Grade: %d"""%(row[0],row[1], row[2])
 
-def make_new_project(*args):
-    title = args[0]
-    description = ' '.join(args[1:-1])
-    max_grade = int(args[-1])
+# def make_new_project(*args):
+#     title = args[0]
+#     description = ' '.join(args[1:-1])
+#     max_grade = int(args[-1])
+#     #print title, description, max_grade
+#     query = """INSERT into Projects (title, description, max_grade) VALUES (?, ?, ?);"""
+#     DB.execute(query, (title, description, max_grade))
+#     CONN.commit()
+#     print "Successfully added project: %s" % title
+
+def make_new_project(title, description, max_grade):
+    max_grade = int(max_grade)
     #print title, description, max_grade
     query = """INSERT into Projects (title, description, max_grade) VALUES (?, ?, ?);"""
     DB.execute(query, (title, description, max_grade))
@@ -87,6 +95,27 @@ def connect_to_db():
     global DB, CONN
     CONN = sqlite3.connect("hackbright.db")
     DB = CONN.cursor()
+
+
+def get_all_githubs():
+    query = """SELECT github FROM Students;"""
+    DB.execute(query)
+    row = DB.fetchone()
+    rows = []
+    while row:
+        rows.append(row)
+        row = DB.fetchone()
+    return rows
+
+def get_all_projects():
+    query = """SELECT title FROM Projects;"""
+    DB.execute(query)
+    row = DB.fetchone()
+    rows = []
+    while row:
+        rows.append(row)
+        row = DB.fetchone()
+    return rows
 
 def main():
     connect_to_db()

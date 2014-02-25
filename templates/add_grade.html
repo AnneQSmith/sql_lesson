@@ -1,0 +1,18 @@
+<html>
+<body>
+    <form action="/new_grade">
+        <select name="github">
+            {% for github in githubs %}
+            <option value={{github[0]}}>{{github[0]}}</option>
+            {% endfor %}
+        </select>
+<!--         <label for="github">Student github</label>
+        <input type="text" name="github"/> -->
+        <label for="title">Project title</label>
+        <input type="text" name="title" value={{title}} />
+        <label for="grade">Grade</label>
+        <input type="text" name="grade"/>
+        <input type="submit">
+    </form>
+</body>
+</html>
